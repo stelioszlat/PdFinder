@@ -6,11 +6,9 @@ from Objects.pdf import *
 files = []  # files holds the pdf files found in path
 pdf_files = []  # store pdf objects
 keywords = []
-results = []
 
 dbg_path = ''  # debugging path
 user_path = None
-path = None
 
 
 def find_pdf(path, name):
@@ -82,36 +80,32 @@ def print_results(verbose=False):
             print(file.name + '\t' + file.pages)
 
 
-def return_result(result_index, verbose=False):
+def open_pdfs(new_keyword, open_path):
+    """
+    Uses PyPDF2 to open all pdf files and extract text
+    creates PDF object for every file and adds it in the pdf_files list
+    extracts text from every file
+    :param new_keyword: search
+    :param open_path: path to open files
+    :return: None
+    """
+    for i in files:
+        file = open_path
+        pdf = open(file + i, 'rb')
+        pdf_object = PdfFileReader(pdf)
 
-    return results[result_index]
+        new_pdf = PDF(i, new_keyword)
+        new_pdf.new_keyword(new_keyword)
+        new_pdf.pages = pdf_object.getNumPages()
+        new_pdf.info = pdf_object.getDocumentInfo()
 
+        for page in range(new_pdf.pages):
+            content = pdf_object.getPage(page)
+            new_pdf.text += content.extractText()
 
-def open_pdfs():
+        pdf_files.append(new_pdf)
+        pdf.close()
 
-    if not files:
-        return
-
-    for i in range(files.__len__()):
-        print(files[i])
-        pdf_files.append(PDF(files[i]))
-
-        open_file = open(os.path.abspath(files[i]), 'rb')
-        pdf_open_file = PdfFileReader(open_file)
-
-        for page in range(pdf_open_file.pages):
-            content = pdf_open_file.getPage(page)
-            pdf_files[i].text += content.extractText()
-
-        open_file.close()
-
-
-def match_keywords():
-    for pdf in pdf_files:
-        for word in keywords:
-            found = re.match(word, pdf.text)
-            if found:
-                pass
 
 def get_path():
     new = input('Select path: /home/')
@@ -133,3 +127,4 @@ def extract_s_text(content, field, chapter = 0):
     :param chapter: a numbered chapter of the file (default 0)
     :return:None
     """
+

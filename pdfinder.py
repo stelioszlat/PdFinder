@@ -18,7 +18,8 @@ if __name__ == '__main__':
     parser.add_argument('-d', '--debug', help='use debugging path', action='store_true')
     args = parser.parse_args()
 
-    key = Keyword(args.keyword)
+    if args.keyword:
+        key = Keyword(args.keyword)
 
     if args.graphical:
         app = QApplication(argv)
@@ -34,9 +35,11 @@ if __name__ == '__main__':
     else:
         if not args.graphical:
             path = get_path()
+        else:
+            path = Root.path_button_clicked()
 
     find_pdf_all(path)
-    open_pdfs(key, path)
+    open_pdfs()
 
     if args.verbose:
         if not pdf_files:

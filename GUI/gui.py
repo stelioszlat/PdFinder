@@ -1,45 +1,52 @@
+
+
 from PyQt5 import QtWidgets
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import *
-
+from PyQt5.QtGui import QIcon
+from Manip.manipulate import *
 
 class Root(QtWidgets.QWidget):
 
     def __init__(self):
         super().__init__()
-        self.initui()
-        self.model = None
-        self.tree = None
 
-    def initui(self):
         self.setWindowTitle('PdFinder')
         self.setGeometry(300, 100, 500, 400)
         keywordlabel = QtWidgets.QLabel(self)
         keywordlabel.setText('Enter keyword')
         keywordlabel.setGeometry(20, 40, 200, 20)
-        t1 = QtWidgets.QTextEdit(self)
-        t1.setGeometry(120, 40, 100, 30)
-        addbutton = QtWidgets.QPushButton(self)
-        addbutton.setText('Add')
-        addbutton.setGeometry(240, 40, 100, 30)
+        self.wordtext = QtWidgets.QPlainTextEdit(self)
+        self.wordtext.setGeometry(120, 40, 100, 30)
+        self.addbutton = QtWidgets.QPushButton(self)
+        self.addbutton.setText('Add')
+        self.addbutton.setGeometry(240, 40, 100, 30)
+        self.deletebutton = QtWidgets.QPushButton(self)
+        self.deletebutton.setText('Delete')
+        self.deletebutton.setGeometry(240, 40, 100, 30)
+        self.deletebutton.setVisible(False)
 
-        t2 = QtWidgets.QTextEdit(self)
-        t2.setGeometry(360, 40, 100, 70)
+        self.words = QListWidget(self)
+        self.words.setGeometry(360, 40, 100, 70)
         pathlabel = QtWidgets.QLabel(self)
         pathlabel.setText('Select Path')
         pathlabel.setGeometry(20, 80, 200, 20)
         pathbutton = QtWidgets.QPushButton(self)
-        pathbutton.setText('Path...')
+        pathbutton.setText('Folder...')
         pathbutton.setGeometry(120, 80, 100, 30)
-        b4 = QtWidgets.QPushButton(self)
-        b4.setText('Find')
-        b4.setGeometry(240, 80, 100, 30)
+        findbutton = QtWidgets.QPushButton(self)
+        findbutton.setText('Find')
+        findbutton.setGeometry(240, 80, 100, 30)
 
         l2 = QtWidgets.QLabel(self)
         l2.setText('Results')
         l2.setGeometry(5, 120, 200, 20)
-        results = QtWidgets.QScrollArea(self)
-        results.setGeometry(5, 160, 480, 220)
+        self.results = QtWidgets.QListWidget(self)
+        self.results.setGeometry(5, 160, 480, 220)
+
+        self.path = '/home'
 
         self.model = QFileSystemModel()
         self.model.setRootPath('/home/')
@@ -50,8 +57,10 @@ class Root(QtWidgets.QWidget):
         self.tree.setSortingEnabled(True)
         self.tree.setWindowTitle('Select folder')
 
-        # addbutton.clicked.connect(self.add_button_clicked())
-        # pathbutton.clicked.connect(self.pathButtonClicked)
+        self.addbutton.clicked.connect(self.add_button_clicked)
+        pathbutton.clicked.connect(self.path_button_clicked)
+        findbutton.clicked.connect(self.find_button_clicked)
+        self.words.itemClicked.connect(self.item_to_delete)
 
         self.show()
 
@@ -59,11 +68,45 @@ class Root(QtWidgets.QWidget):
         if e.key() == Qt.Key_Escape:
             self.close()
         elif e.key() == Qt.Key_Enter:
-            self.addButtonClicked()
+            self.add_button_clicked()
 
     def add_button_clicked(self):
-        pass
-
+        if self.wordtext.toPlainText():
+            word = self.wordtext.toPlainText()
+            self.words.addItem(word)
+            keywords.append(Keyword(word))
+            self.wordtext.setPlainText(None)
+        print(keywords)
 
     def path_button_clicked(self):
+        self.path = QFileDialog.getExistingDirectory(self, 'Open Folder')
+
+    def find_button_clicked(self):
+
+        # start the searching proccess
+        # open_pdfs()
+        self.results.addItem("Done")
+
+
+        # when finished show results
+        pass
+
+    def item_to_delete(self):
+        self.deletebutton.setVisible(True)
+        self.addbutton.setVisible(False)
+
+        # delete from list widget and keywords list
+
+        self.addbutton.setVisible(True)
+        self.deletebutton.setVisible(False)
+
+
+    def closeEvent(self, event):
+        # reply = QMessageBox.question(self, 'Warning!', 'Are you sure you want to quit?',
+        #                              QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        #
+        # if reply == QMessageBox.Yes:
+        #     event.accept()
+        # else:
+        #     event.ignore()
         pass
