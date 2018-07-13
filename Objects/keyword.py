@@ -14,14 +14,15 @@ class Keyword:
         # self.length = len(name)
         # self.ignored()
         self.file_appeared = {}  # file name : times appeared
-        self.ignore = False  # ignored in the search
+        self.ignore = False
+        self.ignored()
 
-    def appeared(self):
+    def appeared(self, file):
         """
 
         :return: None
         """
-        if not self.ignore:
+        if not self.ignored():
             # appearance = 1
             pass
 

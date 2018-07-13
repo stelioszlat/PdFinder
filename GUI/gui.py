@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon
 from Manip.manipulate import *
 
+
 class Root(QtWidgets.QWidget):
 
     def __init__(self):
@@ -15,10 +16,11 @@ class Root(QtWidgets.QWidget):
 
         self.setWindowTitle('PdFinder')
         self.setGeometry(300, 100, 500, 400)
+        self.setFixedSize(500, 400)
         keywordlabel = QtWidgets.QLabel(self)
         keywordlabel.setText('Enter keyword')
         keywordlabel.setGeometry(20, 40, 200, 20)
-        self.wordtext = QtWidgets.QPlainTextEdit(self)
+        self.wordtext = QtWidgets.QLineEdit(self, )
         self.wordtext.setGeometry(120, 40, 100, 30)
         self.addbutton = QtWidgets.QPushButton(self)
         self.addbutton.setText('Add')
@@ -31,7 +33,7 @@ class Root(QtWidgets.QWidget):
         self.words = QListWidget(self)
         self.words.setGeometry(360, 40, 100, 70)
         pathlabel = QtWidgets.QLabel(self)
-        pathlabel.setText('Select Path')
+        pathlabel.setText('Select Folder')
         pathlabel.setGeometry(20, 80, 200, 20)
         pathbutton = QtWidgets.QPushButton(self)
         pathbutton.setText('Folder...')
@@ -49,13 +51,17 @@ class Root(QtWidgets.QWidget):
         self.path = '/home'
 
         self.model = QFileSystemModel()
-        self.model.setRootPath('/home/')
+        self.model.setRootPath('/home')
         self.tree = QTreeView()
         self.tree.setModel(self.model)
         self.tree.setAnimated(False)
         self.tree.setIndentation(20)
         self.tree.setSortingEnabled(True)
         self.tree.setWindowTitle('Select folder')
+        # self.progressbar = QProgressBar(self)
+        # self.progressbar.setGeometry()
+        # self.progressbar.setValue(10)
+        # self.progressbar.setVisible(False)
 
         self.addbutton.clicked.connect(self.add_button_clicked)
         pathbutton.clicked.connect(self.path_button_clicked)
@@ -71,22 +77,31 @@ class Root(QtWidgets.QWidget):
             self.add_button_clicked()
 
     def add_button_clicked(self):
-        if self.wordtext.toPlainText():
-            word = self.wordtext.toPlainText()
+        if self.wordtext.text():
+            word = self.wordtext.text()
             self.words.addItem(word)
             keywords.append(Keyword(word))
-            self.wordtext.setPlainText(None)
+            self.wordtext.setText("")
         print(keywords)
 
     def path_button_clicked(self):
         self.path = QFileDialog.getExistingDirectory(self, 'Open Folder')
+        path = self.path
+        print(path)
 
     def find_button_clicked(self):
 
         # start the searching proccess
-        # open_pdfs()
-        self.results.addItem("Done")
 
+        find_pdf_all(self.path)  # find all pdf files in the path
+
+        if not open_pdfs():
+            self.results.addItem("Could not open file.")
+
+        match_keywords()
+
+        for i in results:
+            self.results.addItem(i)
 
         # when finished show results
         pass
@@ -96,6 +111,9 @@ class Root(QtWidgets.QWidget):
         self.addbutton.setVisible(False)
 
         # delete from list widget and keywords list
+        to_be_deleted = self.words.selectedItems()
+        for item in to_be_deleted:
+            self.words.removeItemWidget(item)
 
         self.addbutton.setVisible(True)
         self.deletebutton.setVisible(False)

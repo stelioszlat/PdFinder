@@ -11,11 +11,9 @@ class PDF:
         self.info = ""
         self.title = ""
         self.authors = []
+        self.keywords = []
         if keyword:
-            self.keywords = []
             self.keywords.append(keyword)
-        else:
-            self.keywords = []
         self.pages = 0
         self.abs_path = ""
         self.weight = 0  # adds weigth to file so it is more important
