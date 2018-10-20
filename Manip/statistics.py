@@ -30,11 +30,14 @@ def pdf_stats(index):
 
 
 # prioritize elevates a pdf file in the pdf list
-def prioratize(index):
-    pass
+def prioritise(p_list):
+
+    for p in p_list:
+        add_weight(p)
 
 
 # add weight to a specific pdf
-def add_weight(index):
-    pass
+def add_weight(p_list_item):
+
+    print(p_list_item)
 

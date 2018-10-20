@@ -1,79 +1,49 @@
 import os
 from PyPDF2 import PdfFileReader
+import pdf_extractor
 from Objects.pdf import *
 from Objects.keyword import *
+from Manip.statistics import prioritise
 
 
-files = []  # files holds the pdf files found in path
-pdf_files = []  # store pdf objects
+files = [
+    [],  # files as str
+    [],  # files as objects
+]
 keywords = [
     Keyword('word'),
     Keyword('keyword'),
-    Keyword('find'),
-    Keyword('search'),
-    Keyword('Git')
 ]  # list of Keyword Objects
-results = []
 
-dbg_path = '/home/zlat/Downloads'  # debugging path
+results = []  # result files from word matching
+
+dbg_path = '$HOME/Downloads'  # debugging path
 user_path = None
-path = '/home'
+path = ''
 
 
-def find_pdf(fpath, name):
-    """
-    find a specific file (name) in a specific dir (path)
-    if found append in the files list
-    :param path: path to search for pdf files
-    :param name: name of the file to find
-    :return: None
-    """
-    for file in os.listdir(fpath):
-        if file.endswith('.pdf'):
-            flag = re.search(name, file)
-            if flag:
-                files.append(file)
-    if files:
-        print('Found file in ' + fpath)
-    else:
-        print('Could not find files in ' + fpath)
-
-
-def find_pdf_all(fpath):
+def find_pdf(fpath, find_all=False, dbg=True):
     """
     mostly used
     enter a path and append all pdf files in the files list
     :param path: path to find pdf files
     :return: None
     """
-    for file in os.listdir(fpath):
-        if file.endswith('.pdf'):
-            files.append(file)
-
-    if files:
-        print('Found files in ' + fpath)
+    if find_all:
+        os.chdir('$HOME')
+        for file in os.listdir(os.walk(os.curdir)):
+            if file.endswith('.pdf'):
+                files[0].append(file)
     else:
-        print('Could not find pdf files in ' + fpath)
+        for file in os.listdir(fpath):
+            if file.endswith('.pdf'):
+                files[0].append(file)
 
-
-def find_every_file():
-    """
-    not working yet
-    search every directory in the linux's home folder
-    append all files found in the files list
-    :return: None
-    """
-    pass
-    status = False
-    for file in os.listdir('/home/'):
-        if file.endswith('.pdf '):
-            files.append(file)
-            status = True
-
-    if status:
-        print('Found pdf files in ' + path)
-    else:
-        print('Could not found pdf files in ' + path)
+    if dbg:
+        if files[0]:
+            print('Found files in ' + fpath)
+        else:
+            print('Could not find pdf files in ' + fpath)
 
 
 def print_results(verbose=False):
@@ -86,9 +56,11 @@ def print_results(verbose=False):
         print(i)
 
     if verbose:
-        print('Name\tPages')
-        for file in pdf_files:
-            print(file.name + '\t' + file.pages)
+        for file in files[1]:
+            print('|=====================================|')
+            print('File:' + file.name)
+            print('Pages:' + str(file.pages))
+            print('Keywords: ' + str(file.keywords))
 
 
 def open_pdfs():
@@ -96,32 +68,66 @@ def open_pdfs():
     if not files:
         return False
 
-    for i in range(files.__len__()):
-        print(files[i])
-        pdf_files.append(PDF(files[i]))
+    # for i in range(files.__len__()):
+    #     print(files[i])
+    #     pdf_files.append(PDF(files[i]))
+    #
+    #     open_file = open(path + files[i], 'rb')
+    #     pdf_open_file = PdfFileReader(open_file, strict=False)
+    #
+    #     for page in range(pdf_open_file.getNumPages()):
+    #         content = pdf_open_file.getPage(page)
+    #         pdf_files[i].text += content.extractText()
+    #
+    #     open_file.close()
 
-        open_file = open(path + files[i], 'rb')
-        pdf_open_file = PdfFileReader(open_file, strict=False)
+    for file in files[0]:
+        try:
+            print(file)
+            files[1].append(PDF(file))
 
-        for page in range(pdf_open_file.getNumPages()):
-            content = pdf_open_file.getPage(page)
-            pdf_files[i].text += content.extractText()
+            pdf_extractor
 
-        open_file.close()
+            open_file = open(path+file, 'rb')
+            pdf_open_file = PdfFileReader(open_file)
+            pages = pdf_open_file.getNumPages()
+            files[1][-1].pages = pages
+
+            for page in range(pages):
+                content = pdf_open_file.getPage(page)
+                files[1][-1].text += content.extractText()
+
+            open_file.close()
+        except IOError:
+            print('I/O Error occurred')
+        except EOFError:
+            print('EOF Error occurred')
 
 
 def match_keywords():
 
-    for pdf in pdf_files:
+    # for pdf in files[1]:
+    #     for word in keywords:
+    #         found = re.findall(word.name, pdf.text)
+    #         if found:
+    #             print(found)
+    #             word.file_appeared[pdf.title] = found.__len__()
+    #             print(word.file_appeared)
+    #             print(files[0])
+    #     results.append(files[0])
+    # print(results)
+
+    for i in range(files[1].__len__()):
         for word in keywords:
-            found = re.findall(word.name, pdf.text)
+            found = re.findall(word.name, files[1][i].text)
             if found:
-                print(found)
-                word.file_appeared[pdf.title] = found.__len__()
+                print('Found times' + str(found.__len__()))
+                word.file_appeared[files[0][i]] = found.__len__()
                 print(word.file_appeared)
-                print(pdf_files)
-        results.append(pdf.title)
-    print(results)
+            else:
+                return False
+        results.append(files[0][i])
+    # print(results)
 
 
 def return_result(result_index, verbose=False):
@@ -130,11 +136,11 @@ def return_result(result_index, verbose=False):
 
 
 def get_path():
-    new = input('Select path: /home/')
+    new = input('Select path: ~/')
     if new.endswith('/'):
-        final_new = '/home/' + new
+        final_new = '$HOME/' + new
     else:
-        final_new = '/home/' + new + '/'
+        final_new = '$HOME' + new + '/'
 
     return final_new
 
@@ -152,7 +158,9 @@ def extract_s_text(content, field, chapter = 0):
 
 
 if __name__ == '__main__':
-    path = '/home/zlat/Downloads/'
-    find_pdf_all(path)
+    path = '/home/zlat/Documents/'
+    find_pdf(path)
     open_pdfs()
     match_keywords()
+    prioritise(files)
+    print_results()

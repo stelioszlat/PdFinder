@@ -9,6 +9,9 @@ class Keyword:
         """
         class Keyword holds info about a keyword being searched in a pdf file
         :param name: holds the keyword
+        :param file_appeared: dictionary holding files and the times the keyword appeared in every file
+        :param ignore: if the word is ignorable it doesn't get matched
+        :param ignored: determine if the word is ignorable
         """
         self.name = name
         # self.length = len(name)

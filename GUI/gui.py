@@ -1,7 +1,5 @@
-
-
 from PyQt5 import QtWidgets
-from PyQt5.QtCore import *
+# from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import *
@@ -9,7 +7,7 @@ from PyQt5.QtGui import QIcon
 from Manip.manipulate import *
 
 
-class Root(QtWidgets.QWidget):
+class Root(QMainWindow):
 
     def __init__(self):
         super().__init__()
@@ -17,6 +15,17 @@ class Root(QtWidgets.QWidget):
         self.setWindowTitle('PdFinder')
         self.setGeometry(300, 100, 500, 400)
         self.setFixedSize(500, 400)
+        icon = QIcon('icon.png')
+        self.setWindowIcon(icon)
+        menuBar = self.menuBar()
+
+        settingsMenu = menuBar.addMenu('Settings')
+        helpMenu = menuBar.addMenu('Help')
+
+        settingsMenu.addAction('Open Settings')
+        helpMenu.addAction('Help')
+        helpMenu.addAction('About')
+
         keywordlabel = QtWidgets.QLabel(self)
         keywordlabel.setText('Enter keyword')
         keywordlabel.setGeometry(20, 40, 200, 20)
@@ -48,7 +57,7 @@ class Root(QtWidgets.QWidget):
         self.results = QtWidgets.QListWidget(self)
         self.results.setGeometry(5, 160, 480, 220)
 
-        self.path = '/home'
+        self.path = '/home/zlat/Downloads'
 
         self.model = QFileSystemModel()
         self.model.setRootPath('/home')
@@ -86,22 +95,20 @@ class Root(QtWidgets.QWidget):
 
     def path_button_clicked(self):
         self.path = QFileDialog.getExistingDirectory(self, 'Open Folder')
-        path = self.path
         print(path)
 
     def find_button_clicked(self):
 
         # start the searching proccess
 
-        find_pdf_all(self.path)  # find all pdf files in the path
+        find_pdf(self.path)  # find all pdf files in the path
 
-        if not open_pdfs():
-            self.results.addItem("Could not open file.")
+        open_pdfs()
 
         match_keywords()
 
-        for i in results:
-            self.results.addItem(i)
+        for i in range(3):
+            self.results.addItem(results[i])
 
         # when finished show results
         pass
@@ -117,7 +124,6 @@ class Root(QtWidgets.QWidget):
 
         self.addbutton.setVisible(True)
         self.deletebutton.setVisible(False)
-
 
     def closeEvent(self, event):
         # reply = QMessageBox.question(self, 'Warning!', 'Are you sure you want to quit?',

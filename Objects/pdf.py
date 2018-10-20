@@ -18,17 +18,20 @@ class PDF:
         self.abs_path = ""
         self.weight = 0  # adds weigth to file so it is more important
 
+    def __str__(self):
+        print('Name: ' + self.name)
+        print('Info: ' + self.info)
+        print('Authors: ' + str(self.authors))
+        print('Keywords: ' + str(self.keywords))
+        print('Pages: ' + str(self.pages))
+        print('Weight: ' + str(self.weight))
+
     def find_keyword(self):
         for key in self.keywords:
             if re.match(key, self.text):
-                pass
+                return key
+        return False
 
     def new_keyword(self, word):
         new = Keyword(word)
         self.keywords.append(new)
-
-    def print_pdf(self):
-        print('Pages : ' + str(self.pages))
-        print('Keywords')
-        for key in self.keywords:
-            key.print_key()
