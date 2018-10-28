@@ -1,6 +1,6 @@
+#! /usr/bin/python3
 import os
 from PyPDF2 import PdfFileReader
-import pdf_extractor
 from Objects.pdf import *
 from Objects.keyword import *
 from Manip.statistics import prioritise
@@ -9,6 +9,7 @@ from Manip.statistics import prioritise
 files = [
     [],  # files as str
     [],  # files as objects
+    [],  # directory of the file
 ]
 keywords = [
     Keyword('word'),
@@ -17,7 +18,7 @@ keywords = [
 
 results = []  # result files from word matching
 
-dbg_path = '$HOME/Downloads'  # debugging path
+dbg_path = os.environ['HOME'] + '/Downloads'  # debugging path
 user_path = None
 path = ''
 
@@ -29,15 +30,21 @@ def find_pdf(fpath, find_all=False, dbg=True):
     :param path: path to find pdf files
     :return: None
     """
+
+    os.chdir(fpath)
+
     if find_all:
-        os.chdir('$HOME')
-        for file in os.listdir(os.walk(os.curdir)):
+        os.chdir(os.environ['HOME'])
+
+    for r, d, f in os.walk(os.curdir):
+        for file in f:
             if file.endswith('.pdf'):
+                print('Found file')
                 files[0].append(file)
-    else:
-        for file in os.listdir(fpath):
-            if file.endswith('.pdf'):
-                files[0].append(file)
+                files[2].append(d)
+    print('SUCCESS!')
+    print(files[2])
+
 
     if dbg:
         if files[0]:
@@ -82,26 +89,24 @@ def open_pdfs():
     #     open_file.close()
 
     for file in files[0]:
-        try:
-            print(file)
-            files[1].append(PDF(file))
+        # try:
+        print(file)
+        files[1].append(PDF(file))
 
-            pdf_extractor
+        open_file = open(path+'/'+file, 'rb')
+        pdf_open_file = PdfFileReader(open_file)
+        pages = pdf_open_file.getNumPages()
+        files[1][-1].pages = pages
 
-            open_file = open(path+file, 'rb')
-            pdf_open_file = PdfFileReader(open_file)
-            pages = pdf_open_file.getNumPages()
-            files[1][-1].pages = pages
+        for page in range(pages):
+            content = pdf_open_file.getPage(page)
+            files[1][-1].text += content.extractText()
 
-            for page in range(pages):
-                content = pdf_open_file.getPage(page)
-                files[1][-1].text += content.extractText()
-
-            open_file.close()
-        except IOError:
-            print('I/O Error occurred')
-        except EOFError:
-            print('EOF Error occurred')
+        open_file.close()
+    # except IOError:
+            # print('I/O Error occurred')
+        # except EOFError:
+            # print('EOF Error occurred')
 
 
 def match_keywords():
@@ -136,12 +141,18 @@ def return_result(result_index, verbose=False):
 
 
 def get_path():
+    """
+    get path from user manually
+    not really usable
+    :return : the new path
+    """
     new = input('Select path: ~/')
-    if new.endswith('/'):
-        final_new = '$HOME/' + new
-    else:
-        final_new = '$HOME' + new + '/'
 
+    final_new = os.environ['HOME'] + new
+    if not new.endswith('/'):
+        final_new += '/'
+
+    print(final_new)
     return final_new
 
 
@@ -158,7 +169,7 @@ def extract_s_text(content, field, chapter = 0):
 
 
 if __name__ == '__main__':
-    path = '/home/zlat/Documents/'
+    path = os.environ['HOME'] + '/Downloads'
     find_pdf(path)
     open_pdfs()
     match_keywords()

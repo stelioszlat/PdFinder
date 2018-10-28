@@ -1,6 +1,7 @@
 # Stelios Zlatintsis 5/7/2017 - 7/7/2017
 # changes until 13/7/2017
 # PDF project
+# pdfinder v-0.1
 import PyPDF2
 import os
 import re
