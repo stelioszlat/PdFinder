@@ -1,6 +1,6 @@
 #! /usr/bin/python3
 import os
-from PyPDF2 import PdfFileReader
+from PyPDF2 import PdfFileReader, utils
 from Objects.pdf import *
 from Objects.keyword import *
 from Manip.statistics import prioritise
@@ -23,7 +23,7 @@ user_path = None
 path = ''
 
 
-def find_pdf(fpath, find_all=False, dbg=True):
+def find_pdf(fpath, find_all, dbg=True):
     """
     mostly used
     enter a path and append all pdf files in the files list
@@ -41,7 +41,8 @@ def find_pdf(fpath, find_all=False, dbg=True):
             if file.endswith('.pdf'):
                 print('Found file')
                 files[0].append(file)
-                files[2].append(d)
+                print(os.path)
+                files[2].append(os.path.join(r, file))
     print('SUCCESS!')
     print(files[2])
 
@@ -88,26 +89,29 @@ def open_pdfs():
     #
     #     open_file.close()
 
-    for file in files[0]:
-        # try:
-        print(file)
-        files[1].append(PDF(file))
+    for i in range(files[0].__len__()):
+        try:
+            print(files[0][i])
+            files[1].append(PDF(files[0][i]))
 
-        open_file = open(path+'/'+file, 'rb')
-        pdf_open_file = PdfFileReader(open_file)
-        pages = pdf_open_file.getNumPages()
-        files[1][-1].pages = pages
+            open_file = open(files[2][i], 'rb')
+            pdf_open_file = PdfFileReader(open_file)
+            pages = pdf_open_file.getNumPages()
+            files[1][-1].pages = pages
 
-        for page in range(pages):
-            content = pdf_open_file.getPage(page)
-            files[1][-1].text += content.extractText()
+            for page in range(pages):
+                content = pdf_open_file.getPage(page)
+                files[1][-1].text += content.extractText()
 
-        open_file.close()
-    # except IOError:
-            # print('I/O Error occurred')
-        # except EOFError:
-            # print('EOF Error occurred')
-
+            open_file.close()
+        except IOError:
+            print('I/O Error occurred')
+        except EOFError:
+            print('EOF Error occurred')
+        except TypeError:
+            print('Type Error occured')
+        except utils.PdfReadError:
+            print('Could not read malformed PDF file')
 
 def match_keywords():
 

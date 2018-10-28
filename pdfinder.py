@@ -30,9 +30,11 @@ if __name__ == '__main__':
     #     key = Keyword(args.keyword)
 
     m.path = os.environ['HOME']
+    all = False
 
     if args.all:
         print('Searching all sub-directories in home')
+        all = True
 
     if args.debug:
         try:
@@ -61,8 +63,8 @@ if __name__ == '__main__':
     else:
         print_results()
 
-    m.find_pdf(m.path, True)
+    m.find_pdf(m.path, all)
     m.open_pdfs()
     m.match_keywords()
     m.prioritise(m.files)
-    m.print_results()
+    m.print_results(True)
