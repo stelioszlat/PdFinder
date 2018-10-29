@@ -39,20 +39,21 @@ def find_pdf(fpath, find_all, dbg=True):
     for r, d, f in os.walk(os.curdir):
         for file in f:
             if file.endswith('.pdf'):
-                print('Found file')
+                # print('Found file')
                 files[0].append(file)
-                print(os.path)
+                # print(os.path)
                 files[2].append(os.path.join(r, file))
-    print('SUCCESS!')
-    print(files[2])
+    # print('SUCCESS!')
+    # print(files[2])
 
 
     if dbg:
         if files[0]:
-            print('Found files in ' + fpath)
+            # print('Found files in ' + fpath)
+            pass
         else:
-            print('Could not find pdf files in ' + fpath)
-
+            # print('Could not find pdf files in ' + fpath)
+            pass
 
 def print_results(verbose=False):
     """
@@ -61,7 +62,8 @@ def print_results(verbose=False):
     :return: None
     """
     for i in files:
-        print(i)
+        # print(i)
+        pass
 
     if verbose:
         for file in files[1]:
@@ -91,7 +93,7 @@ def open_pdfs():
 
     for i in range(files[0].__len__()):
         try:
-            print(files[0][i])
+            # print(files[0][i])
             files[1].append(PDF(files[0][i]))
 
             open_file = open(files[2][i], 'rb')
@@ -130,9 +132,9 @@ def match_keywords():
         for word in keywords:
             found = re.findall(word.name, files[1][i].text)
             if found:
-                print('Found times' + str(found.__len__()))
+                # print('Found times' + str(found.__len__()))
                 word.file_appeared[files[0][i]] = found.__len__()
-                print(word.file_appeared)
+                # print(word.file_appeared)
             else:
                 return False
         results.append(files[0][i])

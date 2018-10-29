@@ -56,15 +56,14 @@ if __name__ == '__main__':
     if args.results:
         results_num = args.R
 
-    if not m.files[0]:
-        print('No Results')
-    elif args.verbose:
-        print_results(True)
-    else:
-        print_results()
-
     m.find_pdf(m.path, all)
     m.open_pdfs()
     m.match_keywords()
     m.prioritise(m.files)
-    m.print_results(True)
+
+    if not m.files[0]:
+        print('No Results')
+    elif args.verbose:
+        m.print_results(True)
+    else:
+        m.print_results()

@@ -40,4 +40,3 @@ def prioritise(p_list):
 def add_weight(p_list_item):
 
     print(p_list_item)
-
