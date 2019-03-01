@@ -3,14 +3,34 @@ import org.apache.pdfbox.text.PDFTextStripper;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class Extractor{
+public class Extractor implements Runnable{
 
-    public String extract(PDDocument doc) throws IOException{
+    private PDDocument doc;
 
-        PDFTextStripper strip = new PDFTextStripper();
-        return strip.getText(doc);
+    public void extract(PDDocument doc) {
+        this.doc = doc;
+        this.run();
     }
 
+    private void findKeywords(String text, ArrayList<String> keywords){
+        Pattern t = Pattern.compile(text);
+        Matcher m;
+    }
+
+    @Override
+    public void run(){
+        try {
+            PDFTextStripper strip = new PDFTextStripper();
+            String text = strip.getText(this.doc);
+
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+    }
 }

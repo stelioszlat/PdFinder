@@ -9,7 +9,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        File pdf = new File("/home/zlat/examples/");
+        File pdf = new File("demo.pdf");
         PDDocument document = PDDocument.load(pdf);
         PDDocumentInformation info = document.getDocumentInformation();
         PDFTextStripper stripper = new PDFTextStripper();
