@@ -4,7 +4,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon
-from Manip.manipulate import *
+from Core.manipulate import *
 
 
 class Root(QMainWindow):
