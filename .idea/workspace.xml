@@ -4,19 +4,7 @@
     <bookmark url="file://$PROJECT_DIR$/Core/manipulate.py" line="122" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1ebbbe69-dc91-4bf1-9ad5-b719ff262324" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Core/extract.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Objects/extract_thread.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/PdFinder.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/PdFinder.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GUI/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/GUI/gui.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Manip/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Core/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Manip/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/Core/database.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Manip/manipulate.py" beforeDir="false" afterPath="$PROJECT_DIR$/Core/manipulate.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Manip/statistics.py" beforeDir="false" afterPath="$PROJECT_DIR$/Core/statistics.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pdfinder.py" beforeDir="false" afterPath="$PROJECT_DIR$/pdfinder.py" afterDir="false" />
-    </list>
+    <list default="true" id="1ebbbe69-dc91-4bf1-9ad5-b719ff262324" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -109,6 +97,12 @@
         <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
+    <option name="PUSH_TAGS">
+      <GitPushTagMode>
+        <option name="argument" value="--follow-tags" />
+        <option name="title" value="Current Branch" />
+      </GitPushTagMode>
+    </option>
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -127,11 +121,10 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="387" />
-    <option name="y" value="177" />
-    <option name="width" value="1258" />
-    <option name="height" value="695" />
+  <component name="ProjectFrameBounds">
+    <option name="y" value="23" />
+    <option name="width" value="1440" />
+    <option name="height" value="801" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -303,7 +296,14 @@
       <option name="project" value="LOCAL" />
       <updated>1531463492921</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="added extract.py extract_thread.py">
+      <created>1559310718617</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1559310718617</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TodoView">
@@ -316,7 +316,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1440" height="801" extended-state="6" />
+    <frame x="0" y="23" width="1440" height="801" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4968153" visible="true" weight="0.1502146" />
@@ -362,7 +362,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Major functionality updates" />
-    <option name="LAST_COMMIT_MESSAGE" value="Major functionality updates" />
+    <MESSAGE value="added extract.py extract_thread.py" />
+    <option name="LAST_COMMIT_MESSAGE" value="added extract.py extract_thread.py" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3/re.pyi">
